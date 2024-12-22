@@ -1,1 +1,2 @@
-Initialized by Azure Data Factory!
+# AzureDataFactory
+This repository is created for maintaining Azure Data Pipelines
