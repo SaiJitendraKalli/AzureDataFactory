@@ -37,105 +37,43 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/DataFlowPipeline')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "CSV-To-Parquet-DataFlow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "CSV-To-Parquet-DataFlow",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"ActivityLog": {},
-									"ParquetFile": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
 				"annotations": [],
-				"lastPublishTime": "2024-11-28T06:02:39Z"
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage_accountKey')]"
+					}
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/CSV-To-Parquet-DataFlow')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DataFlowPipelineToSynapse')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "CSV-To-Synapse",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "CSV-To-Synapse",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"ActivityLog": {},
-									"Synapse": {}
-								}
-							},
-							"staging": {
-								"linkedService": {
-									"referenceName": "AzureDataLakeStorage",
-									"type": "LinkedServiceReference"
-								},
-								"folderPath": "stage"
-							},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
 				"annotations": [],
-				"lastPublishTime": "2024-11-28T06:02:39Z"
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"server": "[parameters('AzureSynapseAnalytics_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSynapseAnalytics_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSynapseAnalytics_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSynapseAnalytics_password')]"
+					}
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/CSV-To-Synapse')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsActivityPoolTable')]",
@@ -343,45 +281,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('AzureDataLakeStorage_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('AzureDataLakeStorage_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"server": "[parameters('AzureSynapseAnalytics_properties_typeProperties_server')]",
-					"database": "[parameters('AzureSynapseAnalytics_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": true,
-					"authenticationType": "SQL",
-					"userName": "[parameters('AzureSynapseAnalytics_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSynapseAnalytics_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/CSV-To-Parquet-DataFlow')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -545,6 +444,107 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/CSV')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsActivityPoolTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DataFlowPipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CSV-To-Parquet-DataFlow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "CSV-To-Parquet-DataFlow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"ActivityLog": {},
+									"ParquetFile": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-11-28T06:02:39Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/CSV-To-Parquet-DataFlow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DataFlowPipelineToSynapse')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CSV-To-Synapse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "CSV-To-Synapse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"ActivityLog": {},
+									"Synapse": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureDataLakeStorage",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "stage"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-11-28T06:02:39Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/CSV-To-Synapse')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
 			]
 		}
 	]

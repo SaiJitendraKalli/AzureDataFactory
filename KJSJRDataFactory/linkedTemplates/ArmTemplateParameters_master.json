@@ -22,6 +22,12 @@
 		},
 		"AzureSynapseAnalytics_properties_typeProperties_userName": {
 			"value": "sqladminuser"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
 		}
 	}
 }
