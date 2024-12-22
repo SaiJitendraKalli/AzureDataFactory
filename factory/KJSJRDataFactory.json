@@ -1,0 +1,10 @@
+{
+	"name": "KJSJRDataFactory",
+	"properties": {
+		"globalConfigurations": {
+			"factoryStagingLSReferenceName": "AzureDataLakeStorage",
+			"factoryStagingLSType": "LinkedServiceReference"
+		}
+	},
+	"location": "eastus"
+}
