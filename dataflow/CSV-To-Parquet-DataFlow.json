@@ -5,11 +5,19 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "CSV",
+						"type": "DatasetReference"
+					},
 					"name": "ActivityLog"
 				}
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "Parquet",
+						"type": "DatasetReference"
+					},
 					"name": "ParquetFile"
 				}
 			],
@@ -33,7 +41,8 @@
 				"          Resource as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> ActivityLog",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ActivityLog",
 				"ActivityLog select(mapColumn(",
 				"          Correlationid,",
 				"          Operationname,",
@@ -50,11 +59,24 @@
 				"     skipDuplicateMapOutputs: true) ~> Projection",
 				"Projection sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
+				"     input(",
+				"          Correlationid as string,",
+				"          Operationname as string,",
+				"          Status as string,",
+				"          Eventcategory as string,",
+				"          Time as string,",
+				"          Subscription as string,",
+				"          Eventinitiatedby as string,",
+				"          Resourcetype as string,",
+				"          Resourcegroup as string,",
+				"          Resource as string",
+				"     ),",
 				"     format: 'parquet',",
+				"     umask: 0022,",
 				"     preCommands: [],",
-				"     postCommands: []) ~> ParquetFile"
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ParquetFile"
 			]
 		}
 	}
