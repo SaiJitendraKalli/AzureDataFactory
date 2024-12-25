@@ -43,7 +43,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> ActivityLog",
-				"ActivityLog sink(allowSchemaDrift: true,",
+				"ActivityLog sink(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     input(",
 				"          Correlationid as string,",
