@@ -67,6 +67,18 @@
 				"     staged: true,",
 				"     saveOrder: 1,",
 				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Correlationid,",
+				"          Operationname,",
+				"          Status,",
+				"          Eventcategory,",
+				"          Level,",
+				"          Subscription,",
+				"          Eventinitiatedby,",
+				"          Resourcetype,",
+				"          Resourcegroup,",
+				"          Resource",
+				"     ),",
 				"     preCommands: [],",
 				"     postCommands: []) ~> SynapseWrite"
 			]
