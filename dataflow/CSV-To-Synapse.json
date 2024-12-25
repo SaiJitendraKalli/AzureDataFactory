@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "PoolActivityTable",
+						"referenceName": "CSV",
 						"type": "DatasetReference"
 					},
 					"name": "ActivityLog"
@@ -18,7 +18,7 @@
 						"referenceName": "PoolActivityTable",
 						"type": "DatasetReference"
 					},
-					"name": "Synapse",
+					"name": "SynapseWrite",
 					"rejectedDataLinkedService": {
 						"referenceName": "AzureDataLakeStorage",
 						"type": "LinkedServiceReference"
@@ -33,7 +33,7 @@
 				"          Status as string,",
 				"          Eventcategory as string,",
 				"          Level as string,",
-				"          Time as timestamp,",
+				"          Time as string,",
 				"          Subscription as string,",
 				"          Eventinitiatedby as string,",
 				"          Resourcetype as string,",
@@ -42,9 +42,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table',",
-				"     staged: true) ~> ActivityLog",
+				"     ignoreNoFilesFound: false) ~> ActivityLog",
 				"ActivityLog sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -70,7 +68,7 @@
 				"     saveOrder: 1,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     preCommands: [],",
-				"     postCommands: []) ~> Synapse"
+				"     postCommands: []) ~> SynapseWrite"
 			]
 		}
 	}
