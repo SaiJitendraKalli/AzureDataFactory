@@ -4,7 +4,8 @@
 		"globalConfigurations": {
 			"factoryStagingLSReferenceName": "AzureDataLakeStorage",
 			"factoryStagingLSType": "LinkedServiceReference",
-			"factoryStagingFolderPath": "stage"
+			"factoryStagingFolderPath": "stage",
+			"PipelineBillingEnabled": "true"
 		}
 	},
 	"location": "eastus"
