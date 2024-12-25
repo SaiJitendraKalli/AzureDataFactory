@@ -273,10 +273,11 @@
 		"Policy": {
 			"recurrence": {
 				"frequency": "Minute",
-				"interval": 15
+				"interval": 1
 			},
 			"mode": "Microbatch"
 		},
+		"status": "Started",
 		"allowVNetOverride": false,
 		"typeProperties": {
 			"staging": {
