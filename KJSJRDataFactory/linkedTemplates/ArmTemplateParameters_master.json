@@ -14,6 +14,9 @@
 		"AzureDataLakeStorage_properties_typeProperties_url": {
 			"value": "https://jitendrastorgaeaccount.dfs.core.windows.net/"
 		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://jitendra.vault.azure.net/"
+		},
 		"containerUri": {
 			"value": ""
 		},
