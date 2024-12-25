@@ -152,6 +152,12 @@
 						"referenceName": "CSV",
 						"type": "DatasetReference"
 					}
+				],
+				"outputs": [
+					{
+						"referenceName": "PoolActivityTable",
+						"type": "DatasetReference"
+					}
 				]
 			}
 		],
