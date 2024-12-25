@@ -277,6 +277,16 @@
 			},
 			"mode": "Microbatch"
 		},
-		"allowVNetOverride": false
+		"allowVNetOverride": false,
+		"typeProperties": {
+			"staging": {
+				"linkedService": {
+					"referenceName": "AzureDataLakeStorage",
+					"type": "LinkedServiceReference"
+				},
+				"folderPath": "stage"
+			},
+			"linkedServiceType": "AzureBlobFS"
+		}
 	}
 }
