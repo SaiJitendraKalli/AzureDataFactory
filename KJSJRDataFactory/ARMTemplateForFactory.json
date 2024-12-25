@@ -11,25 +11,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage'"
 		},
-		"AzureSynapseAnalytics_password": {
+		"AzureSynapseAnalytics_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics'"
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics'"
 		},
 		"AzureDataLakeStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://jitendrastorgaeaccount.dfs.core.windows.net/"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_server": {
-			"type": "string",
-			"defaultValue": "jitendrasynaspse.sql.azuresynapse.net"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_database": {
-			"type": "string",
-			"defaultValue": "DataFactory"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sqladminuser"
 		}
 	},
 	"variables": {
@@ -197,7 +185,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "AzureSynapseAnalyticsActivityPoolTable",
+								"referenceName": "PoolActivityTable",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -211,7 +199,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/CSV')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsActivityPoolTable')]"
+				"[concat(variables('factoryId'), '/datasets/PoolActivityTable')]"
 			]
 		},
 		{
@@ -313,74 +301,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/CSV-To-Synapse')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsActivityPoolTable')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSynapseAnalytics",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "Correlationid",
-						"type": "varchar"
-					},
-					{
-						"name": "Operationname",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Eventcategory",
-						"type": "varchar"
-					},
-					{
-						"name": "Level",
-						"type": "varchar"
-					},
-					{
-						"name": "Time",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "Subscription",
-						"type": "varchar"
-					},
-					{
-						"name": "Eventinitiatedby",
-						"type": "varchar"
-					},
-					{
-						"name": "Resourcetype",
-						"type": "varchar"
-					},
-					{
-						"name": "Resourcegroup",
-						"type": "varchar"
-					},
-					{
-						"name": "Resource",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "PoolActivityLog"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics')]"
 			]
 		},
 		{
@@ -545,16 +465,7 @@
 				"annotations": [],
 				"type": "AzureSqlDW",
 				"typeProperties": {
-					"server": "[parameters('AzureSynapseAnalytics_properties_typeProperties_server')]",
-					"database": "[parameters('AzureSynapseAnalytics_properties_typeProperties_database')]",
-					"encrypt": "optional",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('AzureSynapseAnalytics_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSynapseAnalytics_password')]"
-					}
+					"connectionString": "[parameters('AzureSynapseAnalytics_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -658,7 +569,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "CSV",
+								"referenceName": "PoolActivityTable",
 								"type": "DatasetReference"
 							},
 							"name": "ActivityLog"
@@ -667,7 +578,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "AzureSynapseAnalyticsActivityPoolTable",
+								"referenceName": "PoolActivityTable",
 								"type": "DatasetReference"
 							},
 							"name": "Synapse"
@@ -681,7 +592,7 @@
 						"          Status as string,",
 						"          Eventcategory as string,",
 						"          Level as string,",
-						"          Time as string,",
+						"          Time as timestamp,",
 						"          Subscription as string,",
 						"          Eventinitiatedby as string,",
 						"          Resourcetype as string,",
@@ -690,7 +601,9 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> ActivityLog",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table',",
+						"     staged: true) ~> ActivityLog",
 						"ActivityLog sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
@@ -710,10 +623,12 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     staged: true,",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
+						"     saveOrder: 1,",
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     preCommands: [],",
 						"     postCommands: []) ~> Synapse"
@@ -721,8 +636,75 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/CSV')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsActivityPoolTable')]"
+				"[concat(variables('factoryId'), '/datasets/PoolActivityTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PoolActivityTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "Correlationid",
+						"type": "varchar"
+					},
+					{
+						"name": "Operationname",
+						"type": "varchar"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					},
+					{
+						"name": "Eventcategory",
+						"type": "varchar"
+					},
+					{
+						"name": "Level",
+						"type": "varchar"
+					},
+					{
+						"name": "Time",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Subscription",
+						"type": "varchar"
+					},
+					{
+						"name": "Eventinitiatedby",
+						"type": "varchar"
+					},
+					{
+						"name": "Resourcetype",
+						"type": "varchar"
+					},
+					{
+						"name": "Resourcegroup",
+						"type": "varchar"
+					},
+					{
+						"name": "Resource",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "PoolActivityLog"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics')]"
 			]
 		}
 	]

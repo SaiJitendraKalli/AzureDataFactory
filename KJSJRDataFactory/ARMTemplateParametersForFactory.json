@@ -8,20 +8,11 @@
 		"AzureDataLakeStorage_accountKey": {
 			"value": ""
 		},
-		"AzureSynapseAnalytics_password": {
+		"AzureSynapseAnalytics_connectionString": {
 			"value": ""
 		},
 		"AzureDataLakeStorage_properties_typeProperties_url": {
 			"value": "https://jitendrastorgaeaccount.dfs.core.windows.net/"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_server": {
-			"value": "jitendrasynaspse.sql.azuresynapse.net"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_database": {
-			"value": "DataFactory"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_userName": {
-			"value": "sqladminuser"
 		}
 	}
 }
