@@ -812,6 +812,7 @@
 					},
 					"mode": "Microbatch"
 				},
+				"status": "Started",
 				"allowVNetOverride": false,
 				"typeProperties": {
 					"staging": {
