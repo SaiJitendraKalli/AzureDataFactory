@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "CSV",
+						"referenceName": "PoolActivityTable",
 						"type": "DatasetReference"
 					},
 					"name": "ActivityLog"
@@ -14,34 +14,12 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "AzureSynapseAnalyticsActivityPoolTable",
-						"type": "DatasetReference"
-					},
 					"name": "Synapse"
 				}
 			],
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          Correlationid as string,",
-				"          Operationname as string,",
-				"          Status as string,",
-				"          Eventcategory as string,",
-				"          Level as string,",
-				"          Time as string,",
-				"          Subscription as string,",
-				"          Eventinitiatedby as string,",
-				"          Resourcetype as string,",
-				"          Resourcegroup as string,",
-				"          Resource as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> ActivityLog",
-				"ActivityLog sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
 				"          Correlationid as string,",
 				"          Operationname as string,",
 				"          Status as string,",
@@ -54,15 +32,17 @@
 				"          Resourcegroup as string,",
 				"          Resource as string",
 				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table',",
-				"     staged: true,",
+				"     staged: true) ~> ActivityLog",
+				"ActivityLog sink(allowSchemaDrift: false,",
+				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
+				"     saveOrder: 1,",
+				"     format: 'table',",
 				"     preCommands: [],",
 				"     postCommands: []) ~> Synapse"
 			]

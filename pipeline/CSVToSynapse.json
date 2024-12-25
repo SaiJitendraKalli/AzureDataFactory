@@ -152,12 +152,6 @@
 						"referenceName": "CSV",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "AzureSynapseAnalyticsActivityPoolTable",
-						"type": "DatasetReference"
-					}
 				]
 			}
 		],
