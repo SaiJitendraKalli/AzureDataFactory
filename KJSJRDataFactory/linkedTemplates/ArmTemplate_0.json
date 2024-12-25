@@ -548,7 +548,11 @@
 								"referenceName": "PoolActivityTable",
 								"type": "DatasetReference"
 							},
-							"name": "Synapse"
+							"name": "Synapse",
+							"rejectedDataLinkedService": {
+								"referenceName": "AzureDataLakeStorage",
+								"type": "LinkedServiceReference"
+							}
 						}
 					],
 					"transformations": [],
@@ -593,8 +597,6 @@
 						"     truncate:true,",
 						"     format: 'table',",
 						"     staged: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
 						"     saveOrder: 1,",
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     preCommands: [],",
@@ -603,7 +605,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/PoolActivityTable')]"
+				"[concat(variables('factoryId'), '/datasets/PoolActivityTable')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage')]"
 			]
 		},
 		{
