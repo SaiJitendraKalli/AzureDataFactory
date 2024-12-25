@@ -289,10 +289,11 @@
 								"folderPath": "stage"
 							},
 							"compute": {
-								"coreCount": 8,
+								"coreCount": 16,
 								"computeType": "General"
 							},
-							"traceLevel": "Fine"
+							"traceLevel": "Fine",
+							"runConcurrently": true
 						}
 					}
 				],
@@ -702,6 +703,18 @@
 						"     staged: true,",
 						"     saveOrder: 1,",
 						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Correlationid,",
+						"          Operationname,",
+						"          Status,",
+						"          Eventcategory,",
+						"          Level,",
+						"          Subscription,",
+						"          Eventinitiatedby,",
+						"          Resourcetype,",
+						"          Resourcegroup,",
+						"          Resource",
+						"     ),",
 						"     preCommands: [],",
 						"     postCommands: []) ~> SynapseWrite"
 					]
