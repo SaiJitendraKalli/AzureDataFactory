@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "AzureKeyVault",
 		"typeProperties": {
-			"baseUrl": "https://jitendra.vault.azure.net/"
+			"baseUrl": "https://kv-data-centralus-dev.vault.azure.net/"
 		}
 	}
 }
