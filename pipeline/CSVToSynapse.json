@@ -20,6 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -27,8 +28,14 @@
 						}
 					},
 					"sink": {
-						"type": "SqlDWSink",
-						"allowCopyCommand": true
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -36,115 +43,94 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "Correlationid",
-									"type": "String"
+									"name": "employee_id",
+									"type": "Single",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Correlationid",
-									"type": "String"
+									"name": "employee_id",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Operationname",
-									"type": "String"
+									"name": "department_id",
+									"type": "String",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Operationname",
-									"type": "String"
+									"name": "department_id",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Status",
-									"type": "String"
+									"name": "name",
+									"type": "String",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Status",
-									"type": "String"
+									"name": "name",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Eventcategory",
-									"type": "String"
+									"name": "age",
+									"type": "Int16",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Eventcategory",
-									"type": "String"
+									"name": "age",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Level",
-									"type": "String"
+									"name": "gender",
+									"type": "String",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Level",
-									"type": "String"
+									"name": "gender",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Time",
-									"type": "String"
+									"name": "salary",
+									"type": "Double",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Time",
-									"type": "DateTime"
+									"name": "salary",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							},
 							{
 								"source": {
-									"name": "Subscription",
-									"type": "String"
+									"name": "hire_date",
+									"type": "Date",
+									"physicalType": "String"
 								},
 								"sink": {
-									"name": "Subscription",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Eventinitiatedby",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Eventinitiatedby",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Resourcetype",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Resourcetype",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Resourcegroup",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Resourcegroup",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Resource",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Resource",
-									"type": "String"
+									"name": "hire_date",
+									"type": "String",
+									"physicalType": "UTF8"
 								}
 							}
-						]
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
 				"inputs": [
@@ -155,7 +141,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "PoolActivityTable",
+						"referenceName": "Parquet",
 						"type": "DatasetReference"
 					}
 				]

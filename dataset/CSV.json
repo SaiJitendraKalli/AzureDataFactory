@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "files"
+				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\"",
@@ -19,47 +19,31 @@
 		},
 		"schema": [
 			{
-				"name": "Correlationid",
+				"name": "employee_id",
 				"type": "String"
 			},
 			{
-				"name": "Operationname",
+				"name": "department_id",
 				"type": "String"
 			},
 			{
-				"name": "Status",
+				"name": "name",
 				"type": "String"
 			},
 			{
-				"name": "Eventcategory",
+				"name": "age",
 				"type": "String"
 			},
 			{
-				"name": "Level",
+				"name": "gender",
 				"type": "String"
 			},
 			{
-				"name": "Time",
+				"name": "salary",
 				"type": "String"
 			},
 			{
-				"name": "Subscription",
-				"type": "String"
-			},
-			{
-				"name": "Eventinitiatedby",
-				"type": "String"
-			},
-			{
-				"name": "Resourcetype",
-				"type": "String"
-			},
-			{
-				"name": "Resourcegroup",
-				"type": "String"
-			},
-			{
-				"name": "Resource",
+				"name": "hire_date",
 				"type": "String"
 			}
 		]
