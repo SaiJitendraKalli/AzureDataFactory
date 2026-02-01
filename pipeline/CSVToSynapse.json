@@ -145,6 +145,45 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Delete Source",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "CSV To Synapse",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "CSV",
+						"type": "DatasetReference"
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureDataLakeStorage",
+							"type": "LinkedServiceReference"
+						},
+						"path": "insights-logs-auditevent"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
 			}
 		],
 		"annotations": []
